@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-if (process.env.NODE_DEV === "development") {
+if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
@@ -20,5 +20,5 @@ app.use("/", function (req, res) {
 
 app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_DEV} mode on port ${PORT}`)
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
