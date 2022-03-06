@@ -1,1 +1,1 @@
-POST http://localhost:3001/signin
+POST http://foodernity-server.herokuapp.com/signup
