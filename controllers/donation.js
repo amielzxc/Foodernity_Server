@@ -14,9 +14,6 @@ const makeDonation = async (req, res) => {
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log(typeof user);
-    console.log(user);
-
     let donations = [];
 
     if (typeof foodCategories == "string") {
@@ -50,4 +47,18 @@ const makeDonation = async (req, res) => {
   }
 };
 
-export { makeDonation };
+const getDonations = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const userToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    const donations = await Donation.find({ emailAddress: userToken.user });
+
+    return res.json({ status: "ok", value: donations });
+  } catch (error) {
+    return res.json({ status: "error", value: "Unauthorized token." });
+  }
+};
+
+export { makeDonation, getDonations };
