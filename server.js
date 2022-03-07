@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import env from "dotenv";
 import signinupRouter from "./routes/signinup.js";
 import donationRouter from "./routes/donation.js";
+import accountRouter from "./routes/account.js";
 import connectDB from "./database/connect.js";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 
 app.use(signinupRouter);
 app.use(donationRouter);
+app.use(accountRouter);
 
 const startServer = async () => {
   try {

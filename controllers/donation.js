@@ -48,11 +48,6 @@ const makeDonation = async (req, res) => {
     console.log(error);
     return res.json({ status: "error", value: "Unauthorized token." });
   }
-
-  return res.json({
-    status: "error",
-    value: "Unexpected error occurs. Please try again.",
-  });
 };
 
 export { makeDonation };
