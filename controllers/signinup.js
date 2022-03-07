@@ -9,7 +9,7 @@ import sendMail from "../utils/nodeMailer.js";
 
 dotenv.config();
 const signup = async (req, res) => {
-  const { fullName, emailAddress, password } = req.body;
+  const { fullName, emailAddress, password, profilePicture, method } = req.body;
   const hashedPassword = await bcrpyt.hash(password, 10);
 
   try {
@@ -38,9 +38,11 @@ const signup = async (req, res) => {
       fullName,
       emailAddress,
       password: hashedPassword,
+      profilePicture,
+      method,
     });
     console.log("saved");
-    return res.status(200).json({ status: "error", value: "User registered" });
+    return res.status(200).json({ status: "ok", value: "User registered" });
   } catch (error) {
     console.log(error);
     res.send("Error");
@@ -116,7 +118,7 @@ const forgotPassword = async (req, res) => {
   }
   res.status.json({
     status: "error",
-    value: "Unexpected error occurs. Please try again",
+    value: "Unexpected error occurs. Please try again.",
   });
 };
 
@@ -136,14 +138,36 @@ const confirmCode = async (req, res) => {
       return res.json({ status: "error", value: "Code has already expired" });
     }
 
+    console.log(userCode);
+    await Code.findByIdAndUpdate(userCode._id, { isValid: false });
     return res.json({ status: "ok", value: "Code is valid" });
   } catch (error) {
     console.log(error);
   }
   res.status(200).json({
     status: "error",
-    value: "Unexpected error occurs. Please try again",
+    value: "Unexpected error occurs. Please try again.",
   });
 };
 
-export { signup, signin, forgotPassword, confirmCode };
+const resetPassword = async (req, res) => {
+  const { emailAddress, password } = req.body;
+  const hashedPassword = await bcrpyt.hash(password, 10);
+
+  try {
+    await User.findOneAndUpdate({ emailAddress }, { password: hashedPassword });
+    return res.status(200).json({
+      status: "ok",
+      value: "Password successfully changed.",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.status(200).json({
+    status: "error",
+    value: " Unexpected error occurs. Please try again.",
+  });
+};
+
+export { signup, signin, forgotPassword, confirmCode, resetPassword };

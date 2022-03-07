@@ -4,6 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import env from "dotenv";
 import signinupRouter from "./routes/signinup.js";
+import donationRouter from "./routes/donation.js";
 import connectDB from "./database/connect.js";
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(signinupRouter);
+app.use(donationRouter);
 
 const startServer = async () => {
   try {

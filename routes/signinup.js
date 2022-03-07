@@ -4,6 +4,7 @@ import {
   signin,
   forgotPassword,
   confirmCode,
+  resetPassword,
 } from "../controllers/signinup.js";
 
 const router = express.Router();
@@ -15,5 +16,7 @@ router.route("/signin").post(signin);
 router.route("/forgotpassword").post(forgotPassword);
 
 router.route("/confirmcode").post(confirmCode);
+
+router.route("/resetpassword").post(resetPassword);
 
 export default router;
