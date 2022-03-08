@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrpyt from "bcryptjs";
 import User from "../models/user.js";
+import Notification from "../models/notification.js";
 
 const getAccount = async (req, res) => {
   const { token } = req.body;
@@ -33,4 +34,21 @@ const saveAccount = async (req, res) => {
     return res.json({ status: "error", value: "Unauthorized token." });
   }
 };
-export { getAccount, saveAccount };
+
+const getNotifications = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const userToken = jwt.verify(token, process.env.JWT_SECRET);
+
+    const notifications = await Notification.find({
+      emailAddress: userToken.user,
+    });
+
+    return res.json({ status: "ok", value: notifications });
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error", value: "Unauthorized token." });
+  }
+};
+export { getAccount, saveAccount, getNotifications };

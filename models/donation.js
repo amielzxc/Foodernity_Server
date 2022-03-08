@@ -6,6 +6,7 @@ const donationSchema = new mongoose.Schema({
   donationName: { type: String, required: true },
   donations: { type: Array, required: true },
   status: { type: String, required: true },
+  donatedTo: { type: String, required: true },
 });
 
 export default mongoose.model("Donation", donationSchema);

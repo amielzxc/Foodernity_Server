@@ -40,6 +40,7 @@ const signup = async (req, res) => {
       password: hashedPassword,
       profilePicture,
       method,
+      userType: "User",
     });
     console.log("saved");
     return res.status(200).json({ status: "ok", value: "User registered" });
@@ -47,11 +48,15 @@ const signup = async (req, res) => {
     console.log(error);
     res.send("Error");
   }
-  res.send("Error occurred");
+  return res.send("Error occurred");
 };
 
 const signin = async (req, res) => {
-  const { emailAddress, password } = req.body;
+  const { emailAddress, password, loginType } = req.body;
+
+  if (emailAddress !== "foodernityph@gmail.com" && loginType === "admin") {
+    return res.json({ status: "error", value: "Not authorized" });
+  }
 
   try {
     const user = await User.findOne({ emailAddress: emailAddress }).lean();
@@ -86,7 +91,7 @@ const signin = async (req, res) => {
     res.send("Error");
   }
 
-  res.status(200).send("signin");
+  return res.status(200).send("signin");
 };
 
 const forgotPassword = async (req, res) => {
@@ -116,7 +121,7 @@ const forgotPassword = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  res.status.json({
+  return res.status.json({
     status: "error",
     value: "Unexpected error occurs. Please try again.",
   });
@@ -144,7 +149,7 @@ const confirmCode = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  res.status(200).json({
+  return res.status(200).json({
     status: "error",
     value: "Unexpected error occurs. Please try again.",
   });
@@ -164,7 +169,7 @@ const resetPassword = async (req, res) => {
     console.log(error);
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     status: "error",
     value: " Unexpected error occurs. Please try again.",
   });
