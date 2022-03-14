@@ -3,6 +3,7 @@ import bcrpyt from "bcryptjs";
 import User from "../models/user.js";
 import Notification from "../models/notification.js";
 
+// get user account
 const getAccount = async (req, res) => {
   const { token } = req.body;
 
@@ -17,6 +18,7 @@ const getAccount = async (req, res) => {
   }
 };
 
+// update user account
 const saveAccount = async (req, res) => {
   const { profilePicture, fullName, password, token } = req.body;
 
@@ -35,6 +37,7 @@ const saveAccount = async (req, res) => {
   }
 };
 
+// get user notifications
 const getNotifications = async (req, res) => {
   const { token } = req.body;
 
@@ -52,6 +55,7 @@ const getNotifications = async (req, res) => {
   }
 };
 
+// get all users for admin
 const getUsers = async (req, res) => {
   const { token } = req.body;
 
@@ -67,6 +71,7 @@ const getUsers = async (req, res) => {
   }
 };
 
+// update user status for admin
 const updateUserStatus = async (req, res) => {
   const { _id, newStatus, token } = req.body;
 

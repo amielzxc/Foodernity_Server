@@ -5,9 +5,10 @@ import ReleaseDonation from "../models/releasedonation.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
+// get stocks per status (e.g. Inventory)
 const getStocksPerStatus = async (req, res) => {
-  const { token } = req.body;
-  const status = "Inventory";
+  const { status, token } = req.body;
+
   const dateToday = moment();
   let generateId = 1;
 
@@ -68,6 +69,7 @@ const getStocksPerStatus = async (req, res) => {
   }
 };
 
+// release common donations
 const releaseDonations = async (req, res) => {
   const {
     title,
@@ -131,6 +133,7 @@ const releaseDonations = async (req, res) => {
   }
 };
 
+// release a call for donation
 const releaseCallForDonation = async (req, res) => {
   const { _id, documentation, date, selected, token } = req.body;
   const selectedIds = selected.map((item) => item._id);

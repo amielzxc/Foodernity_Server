@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import CallForDonation from "../models/callfordonation.js";
 
+// create a call for donation for admin
 const createCallForDonation = async (req, res) => {
   const { title, beneficiaries, remarks, image, status, token } = req.body;
 
@@ -23,6 +24,7 @@ const createCallForDonation = async (req, res) => {
   }
 };
 
+// get all call for donations for admin
 const getCallForDonations = async (req, res) => {
   const { status, token } = req.body;
 
@@ -52,6 +54,7 @@ const getCallForDonations = async (req, res) => {
   }
 };
 
+// update status of call for donation for admin
 const updateCallForDonation = async (req, res) => {
   const { _id, newStatus, token } = req.body;
 
