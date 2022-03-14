@@ -9,7 +9,8 @@ import sendMail from "../utils/nodeMailer.js";
 
 dotenv.config();
 const signup = async (req, res) => {
-  const { fullName, emailAddress, password, profilePicture, method } = req.body;
+  const { fullName, emailAddress, password, profilePicture, status, method } =
+    req.body;
   const hashedPassword = await bcrpyt.hash(password, 10);
 
   try {
@@ -40,6 +41,7 @@ const signup = async (req, res) => {
       password: hashedPassword,
       profilePicture,
       method,
+      status,
       userType: "User",
     });
     console.log("saved");
@@ -74,6 +76,10 @@ const signin = async (req, res) => {
     if (await bcrpyt.compare(password, user.password)) {
       console.log("authenticated");
 
+      if (user.status === "Suspended") {
+        return res.json({ status: "error", value: "Account suspended" });
+      }
+
       const token = jwt.sign(
         { id: user._id, user: user.emailAddress },
         process.env.JWT_SECRET
@@ -88,10 +94,13 @@ const signin = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.send("Error");
+    res.json({ status: "error", value: "Invalid email address or password" });
   }
 
-  return res.status(200).send("signin");
+  return res.json({
+    status: "error",
+    value: "Invalid email address or password",
+  });
 };
 
 const forgotPassword = async (req, res) => {

@@ -1,1 +1,1 @@
-POST http://localhost:3001/signup
+POST http://localhost:3001/getstocksperstatus

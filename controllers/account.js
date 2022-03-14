@@ -51,4 +51,40 @@ const getNotifications = async (req, res) => {
     return res.json({ status: "error", value: "Unauthorized token." });
   }
 };
-export { getAccount, saveAccount, getNotifications };
+
+const getUsers = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+
+    const users = await User.find();
+
+    return res.json({ status: "ok", value: users });
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error", value: "Unauthorized token." });
+  }
+};
+
+const updateUserStatus = async (req, res) => {
+  const { _id, newStatus, token } = req.body;
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+
+    await User.findOneAndUpdate(_id, { status: newStatus });
+
+    return res.json({ status: "ok", value: "User updated" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error", value: "Unauthorized token." });
+  }
+};
+export {
+  getAccount,
+  saveAccount,
+  getNotifications,
+  getUsers,
+  updateUserStatus,
+};

@@ -24,6 +24,8 @@ const makeDonation = async (req, res) => {
         foodCategory: foodCategories,
         quantity: quantities,
         expiryDate: expiryDates,
+        status: "Unreceived",
+        donatedTo,
       });
     } else {
       for (let i = 0; i < foodCategories.length; i++) {
@@ -31,6 +33,8 @@ const makeDonation = async (req, res) => {
           foodCategory: foodCategories[i],
           quantity: quantities[i],
           expiryDate: expiryDates[i],
+          status: "Unreceived",
+          donatedTo,
         });
       }
     }
@@ -92,9 +96,8 @@ const updateDonationStatus = async (req, res) => {
 
   try {
     jwt.verify(token, process.env.JWT_SECRET);
-    console.log(req.body);
+
     const result = await Donation.findByIdAndUpdate(_id, { status: newStatus });
-    console.log(result);
 
     let message = "";
 
@@ -104,6 +107,14 @@ const updateDonationStatus = async (req, res) => {
       message = `Your donation ${result.donationName} has been declined.`;
     } else if (newStatus === "Received") {
       message = `Your donation ${result.donationName} has been received.`;
+      console.log("to inventory");
+      await Donation.updateOne(
+        { _id },
+        {
+          $set: { "donations.$[elem].status": "Inventory" },
+        },
+        { arrayFilters: [{ "elem.status": "Unreceived" }] }
+      );
     } else {
       message = `Your donation ${result.donationName} has been donated.`;
     }
@@ -114,10 +125,9 @@ const updateDonationStatus = async (req, res) => {
       message,
     });
 
-    // const donation = await Donation.findById(_id);
-    // console.log(donation);
     return res.json({ status: "ok", value: "Donation status updated." });
   } catch (error) {
+    console.log(error);
     return res.json({ status: "error", value: "Unauthorized token." });
   }
 };

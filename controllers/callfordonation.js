@@ -4,8 +4,6 @@ import CallForDonation from "../models/callfordonation.js";
 const createCallForDonation = async (req, res) => {
   const { title, beneficiaries, remarks, image, status, token } = req.body;
 
-  console.log(req.body);
-
   try {
     jwt.verify(token, process.env.JWT_SECRET);
 
@@ -15,6 +13,8 @@ const createCallForDonation = async (req, res) => {
       remarks,
       image,
       status,
+      donated: false,
+      required: "",
     });
     return res.json({ status: "ok", value: "Call for donation created." });
   } catch (error) {
@@ -44,7 +44,7 @@ const getCallForDonations = async (req, res) => {
         allCallForDonations.push(...callfordonation);
       }
     }
-    console.log(allCallForDonations);
+
     return res.json({ status: "ok", value: allCallForDonations });
   } catch (error) {
     console.log(error);
