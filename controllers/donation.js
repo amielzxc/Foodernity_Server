@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 import Donation from "../models/donation.js";
 import Notification from "../models/notification.js";
+import ReleaseDonation from "../models/releasedonation.js";
+import CallForDonation from "../models/callfordonation.js";
+import mongoose from "mongoose";
+import User from "../models/user.js";
 
 // make a donation for donor
 const makeDonation = async (req, res) => {
@@ -39,8 +43,12 @@ const makeDonation = async (req, res) => {
       }
     }
 
+    const findUser = await User.findOne({ emailAddress: user.user });
+    console.log(findUser);
     await Donation.create({
       emailAddress: user.user,
+      fullName: findUser.fullName,
+      hidden: findUser.hidden,
       donationImage,
       donationName,
       donations,
@@ -132,9 +140,43 @@ const updateDonationStatus = async (req, res) => {
   }
 };
 
+const getAnnouncements = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    //  jwt.verify(token, process.env.JWT_SECRET);
+
+    const releasedDonations = await ReleaseDonation.find();
+    const releasedCallForDonations = await CallForDonation.find({
+      donated: true,
+    });
+
+    const combined = [...releasedDonations, ...releasedCallForDonations];
+
+    for (let i = 0; i < combined.length; i++) {
+      let result = await Donation.aggregate([
+        { $unwind: "$donations" },
+        {
+          $match: {
+            "donations.donatedTo": combined[i]._id.toString(),
+          },
+        },
+      ]);
+
+      combined[i] = { ...combined[i].toJSON(), itemsDonated: result };
+    }
+
+    return res.json({ status: "ok", value: combined });
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error", value: "Unauthorized token." });
+  }
+};
+
 export {
   makeDonation,
   getDonations,
   getDonationsPerStatus,
   updateDonationStatus,
+  getAnnouncements,
 };

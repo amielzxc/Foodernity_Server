@@ -32,7 +32,7 @@ const getStocksPerStatus = async (req, res) => {
     for (let item of callForDonations) {
       categorized[item._id] = { _id: item._id, title: item.title, items: [] };
     }
-
+    console.log(categorized);
     for (let i = 0; i < donations.length; i++) {
       for (let j = 0; j < donations[i].donations.length; j++) {
         const item = donations[i].donations[j];
@@ -141,12 +141,15 @@ const releaseCallForDonation = async (req, res) => {
   try {
     jwt.verify(token, process.env.JWT_SECRET);
 
-    await CallForDonation.findOneAndUpdate(_id, {
-      status: "Completed",
-      donated: true,
-      documentation,
-      date,
-    });
+    await CallForDonation.findOneAndUpdate(
+      { _id },
+      {
+        status: "Completed",
+        donated: true,
+        documentation,
+        date,
+      }
+    );
 
     let itemsToBeUpdated = [];
 

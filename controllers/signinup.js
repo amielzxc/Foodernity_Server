@@ -43,6 +43,7 @@ const signup = async (req, res) => {
       method,
       status,
       userType: "User",
+      hidden: false,
     });
     console.log("saved");
     return res.status(200).json({ status: "ok", value: "User registered" });

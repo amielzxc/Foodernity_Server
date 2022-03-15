@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   method: { type: String, required: true },
   status: { type: String, required: true },
   userType: { type: String, required: true },
+  hidden: { type: Boolean, required: true },
 });
 
 export default mongoose.model("User", userSchema);
