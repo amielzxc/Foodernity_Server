@@ -20,14 +20,14 @@ const getAccount = async (req, res) => {
 
 // update user account
 const saveAccount = async (req, res) => {
-  const { profilePicture, fullName, password, token } = req.body;
+  const { profilePicture, fullName, password, hidden, token } = req.body;
 
   try {
     const userToken = jwt.verify(token, process.env.JWT_SECRET);
     const hashedPassword = await bcrpyt.hash(password, 10);
     await User.findOneAndUpdate(
       { emailAddress: userToken.user },
-      { profilePicture, fullName, password: hashedPassword }
+      { profilePicture, fullName, password: hashedPassword, hidden }
     );
 
     return res.json({ status: "ok", value: "User successfully updated" });
