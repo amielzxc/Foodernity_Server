@@ -104,6 +104,8 @@ const signin = async (req, res) => {
   });
 };
 
+const googleSignin = async (req, res) => {};
+
 const forgotPassword = async (req, res) => {
   const { emailAddress } = req.body;
   try {
@@ -185,4 +187,23 @@ const resetPassword = async (req, res) => {
   });
 };
 
-export { signup, signin, forgotPassword, confirmCode, resetPassword };
+const authenticate = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    jwt.verify(token, process.env.JWT_SECRET);
+
+    return res.json({ status: "ok", value: "valid token" });
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error", value: "Invalid token" });
+  }
+};
+export {
+  signup,
+  signin,
+  forgotPassword,
+  confirmCode,
+  resetPassword,
+  authenticate,
+};
