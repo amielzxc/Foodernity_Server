@@ -104,7 +104,17 @@ const signin = async (req, res) => {
   });
 };
 
-const googleSignin = async (req, res) => {};
+const googleSignin = async (req, res) => {
+  const { fullName, emailAddress, password, profilePicture, status, method } =
+    req.body;
+
+  try {
+    console.log(req.body);
+  } catch (error) {
+    console.log("error");
+    return res.json({ status: "error", value: "Error occured" });
+  }
+};
 
 const forgotPassword = async (req, res) => {
   const { emailAddress } = req.body;
@@ -206,4 +216,5 @@ export {
   confirmCode,
   resetPassword,
   authenticate,
+  googleSignin,
 };
