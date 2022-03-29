@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
-  req.headers.referer = null;
+  req.headers.referer = "no-referrer";
 
   return next();
 });
