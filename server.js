@@ -21,16 +21,21 @@ if (process.env.NODE_ENV === "development") {
 var allowList = ["https://jolly-pike-1d2221.netlify.app"];
 app.use(
   cors({
-    origin: "*",
+    origin: true,
+  })
+);
+/*
+origin: "*",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: false,
     optionsSuccessStatus: 204,
-  })
-);
-
+*/
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.get("/", (req, res) => {
+  res.send("Hello from Stack over flowers");
+});
 app.use(signinupRouter);
 app.use(donationRouter);
 app.use(accountRouter);
