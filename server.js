@@ -35,6 +35,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+
+  return next();
+});
+
+app.use(function (req, res, next) {
   req.headers.referer = "no-referrer";
 
   return next();
