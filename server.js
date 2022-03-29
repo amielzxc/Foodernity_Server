@@ -33,6 +33,12 @@ app.use(function (req, res, next) {
 
   return next();
 });
+
+app.use(function (req, res, next) {
+  req.headers.referer = null;
+
+  return next();
+});
 app.use(cors({ origin: true }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
