@@ -25,6 +25,15 @@ app.use(function (req, res, next) {
   return next();
 });
 
+app.use(function (req, res, next) {
+  if (req.secure) {
+    res.setHeader(
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains; preload"
+    );
+  }
+  return next();
+});
 app.use(cors({ origin: true }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
