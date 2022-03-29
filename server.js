@@ -20,6 +20,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(helmet.frameguard());
+app.use(function (req, res, next) {
+  res.setHeader("Content-Security-Policy", "script-src 'self' ");
+  return next();
+});
 
 app.use(cors({ origin: true }));
 
