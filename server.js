@@ -41,6 +41,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
+  res.setHeader("Permissions-Policy", "self");
+
+  return next();
+});
+
+app.use(function (req, res, next) {
   req.headers.referer = "no-referrer";
 
   return next();
