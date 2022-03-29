@@ -189,4 +189,127 @@ const releaseCallForDonation = async (req, res) => {
   }
 };
 
-export { getStocksPerStatus, releaseDonations, releaseCallForDonation };
+const getCounts = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const donations = await Donation.find().select("donations");
+
+    let categories = {
+      "Canned Foods": {
+        id: 1,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Canned Foods",
+      },
+      "Instant Noodles": {
+        id: 2,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Instant Noodles",
+      },
+      "Canned Fruits": {
+        id: 3,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Canned Fruits",
+      },
+      "Canned Vegetables": {
+        id: 4,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Canned Vegetables",
+      },
+      Eggs: { id: 5, received: 0, donated: 0, balance: 0, category: "Eggs" },
+      Rice: { id: 6, received: 0, donated: 0, balance: 0, category: "Rice" },
+      Cereals: {
+        id: 7,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Cereals",
+      },
+      "Tea/Coffee/Milk/Sugar": {
+        id: 8,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Tea/Coffee/Milk/Sugar",
+      },
+      Biscuits: {
+        id: 9,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Biscuits",
+      },
+      "Condiments and Sauces": {
+        id: 10,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Condiments and Sauces",
+      },
+      Beverages: {
+        id: 11,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: "Beverages",
+      },
+      Snacks: {
+        id: 12,
+        received: 0,
+        donated: 0,
+        balance: 0,
+        category: " Snacks",
+      },
+    };
+    let filtered = [];
+
+    for (let i = 0; i < donations.length; i++) {
+      for (let j = 0; j < donations[i].donations.length; j++) {
+        filtered.push(donations[i].donations[j]);
+      }
+    }
+
+    for (let i = 0; i < filtered.length; i++) {
+      if (filtered[i]["status"] !== "Unreceived") {
+        categories[filtered[i]["foodCategory"]]["received"] =
+          categories[filtered[i]["foodCategory"]]["received"] +
+          Number(filtered[i]["quantity"]);
+      }
+
+      if (filtered[i]["status"] == "Inventory") {
+        categories[filtered[i]["foodCategory"]]["balance"] =
+          categories[filtered[i]["foodCategory"]]["balance"] +
+          Number(filtered[i]["quantity"]);
+      } else if (filtered[i]["status"] == "Donated") {
+        categories[filtered[i]["foodCategory"]]["donated"] =
+          categories[filtered[i]["foodCategory"]]["donated"] +
+          Number(filtered[i]["quantity"]);
+      }
+    }
+
+    for (let i = 0; i < filtered.length; i++) {
+      if (filtered[i]["foodCategory"] == "Canned Foods") {
+        console.log(filtered[i]);
+      }
+    }
+    return res.json({ status: "ok", value: Object.values(categories) });
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "error", value: "Unauthorized token." });
+  }
+};
+
+export {
+  getStocksPerStatus,
+  releaseDonations,
+  releaseCallForDonation,
+  getCounts,
+};

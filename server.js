@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import bodyParser from "body-parser";
 import env from "dotenv";
+import helmet from "helmet";
 import signinupRouter from "./routes/signinup.js";
 import donationRouter from "./routes/donation.js";
 import accountRouter from "./routes/account.js";
@@ -18,18 +19,10 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-var allowList = ["https://jolly-pike-1d2221.netlify.app"];
-app.use(
-  cors({
-    origin: true,
-  })
-);
-/*
-origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
-*/
+app.use(helmet.frameguard());
+
+app.use(cors({ origin: true }));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
