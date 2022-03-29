@@ -42,11 +42,11 @@ app.use(helmet());
 //   return next();
 // });
 
-// app.use(function (req, res, next) {
-//   res.setHeader("Permissions-Policy", "self");
+app.use(function (req, res, next) {
+  res.setHeader("Permissions-Policy", "self");
 
-//   return next();
-// });
+  return next();
+});
 
 // app.use(function (req, res, next) {
 //   req.headers.referer = "no-referrer";
