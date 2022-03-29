@@ -109,8 +109,9 @@ const googleSignin = async (req, res) => {
     req.body;
 
   try {
+    console.log(req.body);
     const user = await User.findOne({ emailAddress: emailAddress });
-
+    console.log(user);
     if (!user) {
       const hashedPassword = await bcrpyt.hash(password, 10);
 
@@ -125,12 +126,14 @@ const googleSignin = async (req, res) => {
         hidden: false,
       });
     }
+
     const user2 = await User.findOne({ emailAddress: emailAddress });
+    console.log(user2);
     const token = jwt.sign(
       { id: user2._id, user: user2.emailAddress },
       process.env.JWT_SECRET
     );
-
+    console.log(token);
     return res.json({ status: "ok", value: token });
   } catch (error) {
     console.log("error");
