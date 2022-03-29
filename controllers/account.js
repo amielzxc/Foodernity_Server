@@ -78,7 +78,7 @@ const updateUserStatus = async (req, res) => {
   try {
     jwt.verify(token, process.env.JWT_SECRET);
 
-    await User.findOneAndUpdate(_id, { status: newStatus });
+    await User.findOneAndUpdate({ _id: _id }, { status: newStatus });
 
     return res.json({ status: "ok", value: "User updated" });
   } catch (error) {
