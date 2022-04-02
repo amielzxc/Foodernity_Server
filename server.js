@@ -20,39 +20,19 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(helmet());
-
-// app.use(helmet.frameguard());
-// app.use(function (req, res, next) {
-//   res.setHeader("Content-Security-Policy", "script-src 'self' ");
-//   return next();
-// });
-
-// app.use(function (req, res, next) {
-//   res.setHeader(
-//     "Strict-Transport-Security",
-//     "max-age=31536000; includeSubDomains; preload"
-//   );
-
-//   return next();
-// });
-
-// app.use(function (req, res, next) {
-//   res.setHeader("X-Content-Type-Options", "nosniff");
-
-//   return next();
-// });
-
 app.use(function (req, res, next) {
   res.setHeader("Permissions-Policy", "self");
 
   return next();
 });
+app.use(function (req, res, next) {
+  res.setHeader(
+    "Content-Security-Policy",
+    "script-src 'self';style-src 'self';font-src 'self'"
+  );
+  return next();
+});
 
-// app.use(function (req, res, next) {
-//   req.headers.referer = "no-referrer";
-
-//   return next();
-// });
 app.use(cors({ origin: true }));
 
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -43,7 +43,7 @@ const signup = async (req, res) => {
       method,
       status,
       userType: "User",
-      hidden: false,
+      hidden: true,
     });
     console.log("saved");
     return res.status(200).json({ status: "ok", value: "User registered" });
@@ -111,7 +111,7 @@ const googleSignin = async (req, res) => {
   try {
     console.log(req.body);
     const user = await User.findOne({ emailAddress: emailAddress });
-    console.log(user);
+    // console.log(user);
     if (!user) {
       const hashedPassword = await bcrpyt.hash(password, 10);
 
@@ -123,8 +123,9 @@ const googleSignin = async (req, res) => {
         method,
         status,
         userType: "User",
-        hidden: false,
+        hidden: true,
       });
+      console.log("created user");
     }
 
     const user2 = await User.findOne({ emailAddress: emailAddress });
@@ -133,7 +134,7 @@ const googleSignin = async (req, res) => {
       { id: user2._id, user: user2.emailAddress },
       process.env.JWT_SECRET
     );
-    console.log(token);
+    // console.log(token);
     return res.json({ status: "ok", value: token });
   } catch (error) {
     console.log("error");
