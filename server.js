@@ -5,10 +5,13 @@ import bodyParser from "body-parser";
 import env from "dotenv";
 import helmet from "helmet";
 import signinupRouter from "./routes/signinup.js";
+import dashboardRouter from "./routes/dashboard.js";
 import donationRouter from "./routes/donation.js";
 import accountRouter from "./routes/account.js";
 import callfordonationRouter from "./routes/callfordonation.js";
 import stocksRouter from "./routes/stocks.js";
+import faqRouter from "./routes/faqs.js";
+import guidelineRouter from "./routes/guideline.js";
 import connectDB from "./database/connect.js";
 
 const app = express();
@@ -42,10 +45,13 @@ app.get("/", (req, res) => {
   res.send("Hello from Stack over flowers");
 });
 app.use(signinupRouter);
+app.use(dashboardRouter);
 app.use(donationRouter);
 app.use(accountRouter);
 app.use(callfordonationRouter);
 app.use(stocksRouter);
+app.use(faqRouter);
+app.use(guidelineRouter);
 
 const startServer = async () => {
   try {
