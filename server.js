@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
 app.use(function (req, res, next) {
   res.setHeader(
     "Content-Security-Policy",
-    "script-src 'self';style-src 'self';font-src 'self'"
+    "script-src 'self';style-src 'self';font-src 'self'; frame-ancestors 'self'"
   );
   return next();
 });
