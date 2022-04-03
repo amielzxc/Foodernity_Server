@@ -1,1 +1,1 @@
-POST http://localhost:3001/getcounts
+POST http://localhost:3001/getstatistics
